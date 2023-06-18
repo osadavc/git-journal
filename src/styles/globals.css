@@ -19,3 +19,7 @@ body {
 h1 {
   font-family: "Gloria Hallelujah", cursive;
 }
+
+.wired-card-container .wired-rendered {
+  width: 100%;
+}
