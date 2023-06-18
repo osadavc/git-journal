@@ -8,6 +8,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     <>
       <Head>
         <title>Git Journal | Your Journal, Your Life</title>
+        <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
       </Head>
       <WiredElements />
       <Component {...pageProps} />

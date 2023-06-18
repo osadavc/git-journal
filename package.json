@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@passageidentity/passage-elements": "^1.9.1",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5",

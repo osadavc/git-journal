@@ -1,16 +1,27 @@
+import Link from "next/link";
+
 const Hero = () => {
   return (
     <div className="max-w-7xl mx-auto pt-20 px-4">
       <div className="text-center">
+        <img
+          src="/images/logo.png"
+          alt="GitJournal Logo"
+          className="w-36 mx-auto"
+        />
+
         <h1 className="text-8xl font-semibold">Git Journal</h1>
 
         <h2 className="text-3xl mt-6">Your Life, Your Journal</h2>
+        <h3>Store your journal entries in GitHub encrypted and be free</h3>
 
-        <div className="mt-5">
-          <wired-button elevation="3">
-            <p className="capitalize text-lg px-3">Create Your Journal</p>
-          </wired-button>
-        </div>
+        <Link href="/login">
+          <div className="mt-5">
+            <wired-button elevation="3">
+              <p className="capitalize text-lg px-3">Create Your Journal</p>
+            </wired-button>
+          </div>
+        </Link>
 
         <div className="flex wired-card-container mt-20 space-x-5 text-left">
           <div className="w-full">
