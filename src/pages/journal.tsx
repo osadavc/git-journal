@@ -1,3 +1,4 @@
+import Header from "@/components/Journal/Header";
 import usePassage from "@/hooks/usePassage";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -12,7 +13,11 @@ const Journal = () => {
     }
   }, [isLoading]);
 
-  return <div></div>;
+  return (
+    <div>
+      <Header />
+    </div>
+  );
 };
 
 export default Journal;
