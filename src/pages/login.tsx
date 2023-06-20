@@ -1,11 +1,35 @@
 import Header from "@/components/Login/Header";
 import usePassage from "@/hooks/usePassage";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+
+interface authResult {
+  redirect_url: string;
+  auth_token: string;
+  refresh_token?: string;
+  refresh_token_expiration?: number;
+}
 
 const Login = () => {
   const { isAuthorized, isLoading } = usePassage();
   const router = useRouter();
+
+  const passageElement = useRef<Element | null>(null);
+
+  useEffect(() => {
+    passageElement.current = document.querySelector("passage-auth");
+
+    (passageElement.current! as any).onSuccess = async (
+      authResult: authResult
+    ) => {
+      const { status } = await axios.get("/api/auth");
+
+      if (status === 200) {
+        router.push(authResult.redirect_url);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     import("@passageidentity/passage-elements/passage-auth");
