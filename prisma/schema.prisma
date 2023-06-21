@@ -8,9 +8,10 @@ datasource db {
 }
 
 model User {
-  passageId          String   @id
-  email              String   @unique
-  createdAt          DateTime @default(now())
-  githubAccessToken  String?
-  githubRefreshToken String?
+  passageId             String    @id
+  email                 String    @unique
+  createdAt             DateTime  @default(now())
+  githubAccessToken     String?
+  accessTokenExpiration DateTime?
+  githubRefreshToken    String?
 }

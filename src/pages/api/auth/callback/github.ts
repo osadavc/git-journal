@@ -1,22 +1,53 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
 import { createRouter } from "next-connect";
-import Passage from "@passageidentity/passage-node";
 import prisma from "@/lib/prisma";
 import axios from "axios";
+import {
+  NextApiRequestWithUser,
+  onError,
+  onNoMatch,
+  auth,
+} from "@/utils/apiUtils";
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
 
-const passageConfig = {
-  appID: process.env.NEXT_PUBLIC_PASSAGE_APP_ID!,
-  apiKey: process.env.PASSAGE_API_KEY!,
-};
-const passage = new Passage(passageConfig);
+router.use(auth);
 
 router.get(async (req, res) => {
-  const userID = await passage.authenticateRequest(req);
-  if (!userID) return res.status(401).json({ message: "Unauthorized" });
-
   const { code } = req.query;
+
+  if (!code) return res.redirect("/");
+
+  const { data } = await axios.post(
+    "https://github.com/login/oauth/access_token",
+    {
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
+      redirect_uri: process.env.GITHUB_REDIRECT_URL,
+    }
+  );
+
+  const params = new URLSearchParams(data);
+
+  const expirationTime =
+    Math.floor(Date.now() / 1000) + parseInt(params.get("expires_in")!);
+
+  await prisma.user.update({
+    where: {
+      passageId: req.userID,
+    },
+    data: {
+      githubAccessToken: params.get("access_token"),
+      githubRefreshToken: params.get("refresh_token"),
+      accessTokenExpiration: new Date(expirationTime * 1000),
+    },
+  });
+
+  res.redirect("/journal");
 });
 
-export default router.handler();
+export default router.handler({
+  onError: onError,
+  onNoMatch: onNoMatch,
+});
