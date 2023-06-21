@@ -1,3 +1,4 @@
+import ConnectGithub from "@/components/Journal/ConnectGithub";
 import Header from "@/components/Journal/Header";
 import usePassage from "@/hooks/usePassage";
 import { useRouter } from "next/router";
@@ -16,6 +17,7 @@ const Journal = () => {
   return (
     <div>
       <Header />
+      <ConnectGithub />
     </div>
   );
 };

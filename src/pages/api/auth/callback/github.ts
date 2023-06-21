@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
 import Passage from "@passageidentity/passage-node";
 import prisma from "@/lib/prisma";
+import axios from "axios";
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
@@ -15,25 +16,7 @@ router.get(async (req, res) => {
   const userID = await passage.authenticateRequest(req);
   if (!userID) return res.status(401).json({ message: "Unauthorized" });
 
-  const passageUser = await passage.user.get(userID);
-
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      passageId: userID,
-    },
-  });
-
-  if (existingUser)
-    return res.status(200).json({ message: "User already exists" });
-
-  await prisma.user.create({
-    data: {
-      passageId: userID,
-      email: passageUser.email,
-    },
-  });
-
-  res.status(200).json({ message: "User created" });
+  const { code } = req.query;
 });
 
 export default router.handler();

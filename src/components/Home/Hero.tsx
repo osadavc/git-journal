@@ -1,6 +1,9 @@
 import Link from "next/link";
+import usePassage from "@/hooks/usePassage";
 
 const Hero = () => {
+  const { isAuthorized } = usePassage();
+
   return (
     <div className="max-w-7xl mx-auto pt-20 px-4">
       <div className="text-center">
@@ -17,8 +20,10 @@ const Hero = () => {
 
         <Link href="/login">
           <div className="mt-5">
-            <wired-button elevation="3">
-              <p className="capitalize text-lg px-3">Create Your Journal</p>
+            <wired-button elevation="1">
+              <p className="capitalize text-lg px-3">
+                {isAuthorized ? "Go to your journal" : "Create your journal"}
+              </p>
             </wired-button>
           </div>
         </Link>
