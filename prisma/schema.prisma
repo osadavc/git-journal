@@ -14,4 +14,13 @@ model User {
   githubAccessToken     String?
   accessTokenExpiration DateTime?
   githubRefreshToken    String?
+  journalRepoName       String?
+  mode                  KeyMode?
+  secretKey             String?
+  initKey               String?
+}
+
+enum KeyMode {
+  Custodial
+  NonCustodial
 }

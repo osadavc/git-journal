@@ -31,7 +31,7 @@ router.get(async (req, res) => {
   const params = new URLSearchParams(data);
 
   const expirationTime =
-    Math.floor(Date.now() / 1000) + parseInt(params.get("expires_in")!);
+    Math.floor(Date.now() / 1000) + parseInt(params.get("expires_in")!) - 1000;
 
   await prisma.user.update({
     where: {

@@ -1,30 +1,31 @@
 import ConnectGithub from "@/components/Journal/ConnectGithub";
+import CreateRepo from "@/components/Journal/CreateRepo";
 import Header from "@/components/Journal/Header";
-import usePassage from "@/hooks/usePassage";
 import prisma from "@/lib/prisma";
 import Passage from "@passageidentity/passage-node";
 import { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 interface JournalProps {
   isLoggedIntoGithub: boolean;
+  isRepoCreated: boolean;
 }
 
-const Journal: NextPage<JournalProps> = ({ isLoggedIntoGithub }) => {
-  const { isAuthorized, isLoading } = usePassage();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading && !isAuthorized) {
-      router.push("/login");
-    }
-  }, [isLoading]);
-
+const Journal: NextPage<JournalProps> = ({
+  isLoggedIntoGithub,
+  isRepoCreated,
+}) => {
   return (
     <div>
       <Header />
-      {isLoggedIntoGithub ? <div>Logged in</div> : <ConnectGithub />}
+      {isLoggedIntoGithub ? (
+        isRepoCreated ? (
+          <div>Done</div>
+        ) : (
+          <CreateRepo />
+        )
+      ) : (
+        <ConnectGithub />
+      )}
     </div>
   );
 };
@@ -44,22 +45,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 
-  const userID = await passage.authenticateRequest(req);
+  try {
+    const userID = await passage.authenticateRequest(req);
 
-  const user = await prisma.user.findUnique({
-    where: {
-      passageId: userID,
-    },
-    select: {
-      githubAccessToken: true,
-    },
-  });
+    const user = await prisma.user.findUnique({
+      where: {
+        passageId: userID,
+      },
+      select: {
+        githubAccessToken: true,
+        journalRepoName: true,
+      },
+    });
 
-  return {
-    props: {
-      isLoggedIntoGithub: !!user?.githubAccessToken,
-    },
-  };
+    return {
+      props: {
+        isLoggedIntoGithub: !!user?.githubAccessToken,
+        isRepoCreated: !!user?.journalRepoName,
+      },
+    };
+  } catch (error) {
+    return { props: {}, redirect: "/login" };
+  }
 };
 
 export default Journal;
