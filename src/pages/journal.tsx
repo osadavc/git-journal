@@ -1,9 +1,11 @@
+import BackupRequired from "@/components/Journal/BackupRequired";
 import ConnectGithub from "@/components/Journal/ConnectGithub";
 import CreateRepo from "@/components/Journal/CreateRepo";
 import Header from "@/components/Journal/Header";
 import prisma from "@/lib/prisma";
 import Passage from "@passageidentity/passage-node";
 import { GetServerSideProps, NextPage } from "next";
+import { useEffect, useState } from "react";
 
 interface JournalProps {
   isLoggedIntoGithub: boolean;
@@ -14,9 +16,25 @@ const Journal: NextPage<JournalProps> = ({
   isLoggedIntoGithub,
   isRepoCreated,
 }) => {
+  const [isBackupRequired, setIsBackupRequired] = useState(false);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    const isBackupRequired = localStorage.getItem("isBackupRequired");
+
+    if (isBackupRequired) {
+      setIsBackupRequired(true);
+    } else {
+      setIsBackupRequired(false);
+    }
+  }, [reload]);
+
   return (
     <div>
       <Header />
+
+      {isBackupRequired && <BackupRequired setReload={setReload} />}
+
       {isLoggedIntoGithub ? (
         isRepoCreated ? (
           <div>Done</div>

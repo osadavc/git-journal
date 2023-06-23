@@ -18,6 +18,7 @@ const CreateRepo = () => {
       data: { keys },
     } = await axios.post("/api/github/createRepo");
     localStorage.setItem("keys", JSON.stringify(keys));
+    localStorage.setItem("isBackupRequired", "true");
 
     nProgress.done();
     location.reload();
