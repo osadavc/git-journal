@@ -1,8 +1,9 @@
 import Header from "@/components/Login/Header";
-import usePassage from "@/hooks/usePassage";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { GetServerSideProps } from "next";
+import Passage from "@passageidentity/passage-node";
 
 interface authResult {
   redirect_url: string;
@@ -12,7 +13,6 @@ interface authResult {
 }
 
 const Login = () => {
-  const { isAuthorized, isLoading } = usePassage();
   const router = useRouter();
 
   const passageElement = useRef<Element | null>(null);
@@ -33,11 +33,7 @@ const Login = () => {
 
   useEffect(() => {
     import("@passageidentity/passage-elements/passage-auth");
-
-    if (!isLoading && isAuthorized) {
-      router.push("/journal");
-    }
-  }, [isLoading]);
+  }, []);
 
   return (
     <div>
@@ -56,6 +52,42 @@ const Login = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const passageConfig = {
+    appID: process.env.NEXT_PUBLIC_PASSAGE_APP_ID!,
+    apiKey: process.env.PASSAGE_API_KEY!,
+    authStrategy: "HEADER",
+  };
+  const passage = new Passage(passageConfig as any);
+
+  const authToken = context.req.cookies["psg_auth_token"];
+  const req = {
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    },
+  };
+
+  try {
+    const userID = await passage.authenticateRequest(req);
+
+    console.log(userID);
+
+    if (userID) {
+      console.log("redirecting");
+      return {
+        props: {},
+        redirect: {
+          destination: "/journal",
+        },
+      };
+    } else {
+      return { props: {} };
+    }
+  } catch (error) {
+    return { props: {} };
+  }
 };
 
 export default Login;

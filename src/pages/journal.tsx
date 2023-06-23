@@ -77,6 +77,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     });
 
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     return {
       props: {
         isLoggedIntoGithub: !!user?.githubAccessToken,
@@ -84,7 +88,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (error) {
-    return { props: {}, redirect: "/login" };
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+      },
+    };
   }
 };
 
