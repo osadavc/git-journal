@@ -35,3 +35,18 @@ h1 {
 .wired-card-container .wired-rendered {
   width: 100%;
 }
+
+.journal-writer-container .wired-rendered {
+  min-height: 80vh;
+}
+
+/* React Calendar */
+
+.react-calendar {
+  font-family: "dpdorkdiary", "Gloria Hallelujah", cursive !important;
+  border: none !important;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: inherit !important;
+}

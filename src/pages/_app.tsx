@@ -1,5 +1,6 @@
 import WiredElements from "@/components/Common/WiredElements";
 import "@/styles/globals.css";
+import "react-calendar/dist/Calendar.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 

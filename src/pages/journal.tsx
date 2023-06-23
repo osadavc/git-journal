@@ -2,6 +2,7 @@ import BackupRequired from "@/components/Journal/BackupRequired";
 import ConnectGithub from "@/components/Journal/ConnectGithub";
 import CreateRepo from "@/components/Journal/CreateRepo";
 import Header from "@/components/Journal/Header";
+import MainJournal from "@/components/Journal/MainJournal";
 import prisma from "@/lib/prisma";
 import Passage from "@passageidentity/passage-node";
 import { GetServerSideProps, NextPage } from "next";
@@ -37,7 +38,7 @@ const Journal: NextPage<JournalProps> = ({
 
       {isLoggedIntoGithub ? (
         isRepoCreated ? (
-          <div>Done</div>
+          <MainJournal />
         ) : (
           <CreateRepo />
         )
