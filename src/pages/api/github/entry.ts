@@ -101,6 +101,8 @@ router
     if (!date || !mode)
       return res.status(400).json({ error: "Missing date or mode" });
 
+    const formattedDate = formatDate(date);
+
     const user = await prisma.user.findUnique({
       where: {
         passageId: req.userID,
@@ -142,6 +144,23 @@ router
       }
     );
 
+    let oldHash;
+
+    try {
+      const { data: existingEntryData }: { data: any } = await octokit.request(
+        "GET /repos/{owner}/{repo}/contents/{path}",
+        {
+          owner: user.journalRepoName?.split("/")[0],
+          repo: user.journalRepoName?.split("/")[1],
+          path: `${formattedDate}.md`,
+        }
+      );
+
+      if (data.sha) {
+        oldHash = existingEntryData.sha;
+      }
+    } catch (error) {}
+
     const decoded = atob(data.content);
     const decrypted = decryptMessage(decoded, keys.secretKey!, keys.initKey!);
 
@@ -155,9 +174,10 @@ router
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
       owner: user.journalRepoName?.split("/")[0],
       repo: user.journalRepoName?.split("/")[1],
-      path: `${formatDate(date)}.md`,
+      path: `${formattedDate}.md`,
       message: `Journal Updated ${new Date().toISOString()}`,
       content: encrypted,
+      sha: oldHash,
     });
 
     return res.status(200).json({ success: true });
