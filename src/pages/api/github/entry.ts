@@ -40,8 +40,7 @@ router
       },
     });
     if (!user || user.journalRepoName === null) {
-      res.status(404).json({ error: "User not found" });
-      return;
+      return res.status(404).json({ error: "User not found" });
     }
     if (mode === "Custodial") {
       keys = {
@@ -50,8 +49,7 @@ router
       };
     } else {
       if (!secretKey || !initKey) {
-        res.status(400).json({ error: "Missing keys" });
-        return;
+        return res.status(400).json({ error: "Missing keys" });
       }
 
       keys = {
@@ -63,17 +61,18 @@ router
       auth: user?.githubAccessToken,
     });
 
-    if (!keys.secretKey || !keys.initKey)
+    if (!keys.secretKey || !keys.initKey) {
       return res.status(400).json({ error: "Missing keys" });
+    }
 
-    octokit
+    await octokit
       .request("GET /repos/{owner}/{repo}/contents/{path}", {
         owner: user.journalRepoName?.split("/")[0],
         repo: user.journalRepoName?.split("/")[1],
         path: `${formatDate(date)}.md`,
       })
-      .then((res: any) => {
-        const decoded = atob(res.data.content);
+      .then((response: any) => {
+        const decoded = atob(response.data.content);
         const decrypted = decryptMessage(
           decoded,
           keys.secretKey!,
@@ -82,7 +81,8 @@ router
 
         return res.status(200).json({ content: decrypted });
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         return res.status(404).json({ error: "File not found" });
       });
   })

@@ -1,9 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import JournalEditor from "./JournalEditor";
+import axios from "axios";
 
 const MainJournal = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const keys = JSON.parse(localStorage.getItem("keys")!);
+
+      try {
+        const { data } = await axios.get("/api/github/entry", {
+          params: {
+            secretKey: keys.secret,
+            initKey: keys.vector,
+            date: selectedDate.toDateString(),
+            mode: "NonCustodial",
+          },
+        });
+
+        setContent(data.content);
+      } catch (error: any) {
+        if (error.response.status == 404) {
+          setContent("");
+        }
+      }
+    })();
+  }, [selectedDate]);
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col mt-7 px-4">
@@ -25,7 +50,7 @@ const MainJournal = () => {
         <div className="flex-[3]">
           <div className="wired-card-container journal-writer-container">
             <wired-card>
-              <JournalEditor date={selectedDate} />
+              <JournalEditor date={selectedDate} content={content} />
             </wired-card>
           </div>
         </div>

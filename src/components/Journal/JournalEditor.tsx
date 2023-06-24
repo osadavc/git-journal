@@ -19,30 +19,54 @@ import {
   FaSave,
 } from "react-icons/fa";
 import Placeholder from "@tiptap/extension-placeholder";
+import axios from "axios";
 
-const JournalEditor = ({ date }: { date: Date }) => {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Document,
-      Paragraph,
-      Text,
-      Placeholder.configure({
-        placeholder: "Start writing...",
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class: "prose focus:outline-none mt-5",
+const JournalEditor = ({ date, content }: { date: Date; content: string }) => {
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit,
+        Document,
+        Paragraph,
+        Text,
+        Placeholder.configure({
+          placeholder: "Start writing...",
+        }),
+      ],
+      editorProps: {
+        attributes: {
+          class: "prose focus:outline-none mt-5",
+        },
       },
+      content: content,
     },
-  });
+    [content]
+  );
+
+  const saveContent = async () => {
+    const keys = JSON.parse(localStorage.getItem("keys")!);
+
+    const { data } = await axios.post(
+      "/api/github/entry",
+      {
+        content: editor?.getHTML()!,
+      },
+      {
+        params: {
+          secretKey: keys.secret,
+          initKey: keys.vector,
+          date: date.toDateString(),
+          mode: "NonCustodial",
+        },
+      }
+    );
+  };
 
   return (
     <div className="p-3 wired-divider-container">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">{date.toDateString()}</h2>
-        <button>
+        <button onClick={saveContent}>
           <FaSave />
         </button>
       </div>
