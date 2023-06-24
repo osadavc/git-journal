@@ -42,6 +42,15 @@ h1 {
 
 /* React Calendar */
 
+.react-calendar__tile--now {
+  background: #ffff76;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #ffffa9;
+}
+
 .react-calendar {
   font-family: "dpdorkdiary", "Gloria Hallelujah", cursive !important;
   border: none !important;
@@ -49,6 +58,11 @@ h1 {
 
 .react-calendar__month-view__days__day--weekend {
   color: inherit !important;
+}
+
+.react-calendar__tile--active {
+  background: #000 !important;
+  color: white !important;
 }
 
 /* ProseMirror */
