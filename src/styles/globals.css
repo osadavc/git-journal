@@ -50,3 +50,23 @@ h1 {
 .react-calendar__month-view__days__day--weekend {
   color: inherit !important;
 }
+
+/* ProseMirror */
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd !important;
+  content: attr(data-placeholder) !important;
+  float: left !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+.editor-menu-bar {
+  .item {
+    @apply text-gray-400;
+  }
+
+  .is-active {
+    @apply text-gray-900;
+  }
+}
