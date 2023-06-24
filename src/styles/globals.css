@@ -92,3 +92,46 @@ h1 {
     @apply text-gray-900;
   }
 }
+
+.prose {
+  max-width: 100% !important;
+
+  > h1 {
+    font-size: 25px;
+    margin-top: 30px !important;
+  }
+
+  > ul {
+    > li {
+      margin-bottom: 0;
+      margin-top: 0;
+
+      p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  > ol {
+    > li {
+      margin-bottom: 0;
+      margin-top: 0;
+
+      p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  blockquote {
+    p::before {
+      content: "";
+    }
+
+    p::after {
+      content: "";
+    }
+  }
+}

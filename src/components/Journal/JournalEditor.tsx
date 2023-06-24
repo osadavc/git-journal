@@ -35,7 +35,7 @@ const JournalEditor = ({ date, content }: { date: Date; content: string }) => {
       ],
       editorProps: {
         attributes: {
-          class: "prose focus:outline-none mt-5",
+          class: "prose focus:outline-none mt-5 prose-stone",
         },
       },
       content: content,

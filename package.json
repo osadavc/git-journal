@@ -12,6 +12,7 @@
     "@passageidentity/passage-elements": "^1.9.1",
     "@passageidentity/passage-node": "^2.3.0",
     "@prisma/client": "^4.16.0",
+    "@tailwindcss/typography": "^0.5.9",
     "@tiptap/extension-document": "^2.0.3",
     "@tiptap/extension-paragraph": "^2.0.3",
     "@tiptap/extension-placeholder": "^2.0.3",
