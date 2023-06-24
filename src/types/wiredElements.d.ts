@@ -5,6 +5,7 @@ declare global {
     interface IntrinsicElements {
       "wired-button": any;
       "wired-card": any;
+      "wired-divider": any;
     }
   }
 }

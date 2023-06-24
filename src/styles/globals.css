@@ -36,11 +36,19 @@ h1 {
   width: 100%;
 }
 
+.wired-divider-container .wired-rendered {
+  min-height: auto !important;
+}
+
 .journal-writer-container .wired-rendered {
   min-height: 80vh;
 }
 
 /* React Calendar */
+
+.react-calendar {
+  width: 100% !important;
+}
 
 .react-calendar__tile--now {
   background: #ffff76;

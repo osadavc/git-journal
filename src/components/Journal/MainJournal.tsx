@@ -11,8 +11,8 @@ const MainJournal = () => {
         Hey there ! Welcome to your Journal 👋🏻
       </h2>
 
-      <div className="flex space-x-5">
-        <div className="flex-1">
+      <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
+        <div className="flex-1 wired-card-container">
           <wired-card>
             <Calendar
               onChange={(e) => {
@@ -25,7 +25,7 @@ const MainJournal = () => {
         <div className="flex-[3]">
           <div className="wired-card-container journal-writer-container">
             <wired-card>
-              <JournalEditor />
+              <JournalEditor date={selectedDate} />
             </wired-card>
           </div>
         </div>

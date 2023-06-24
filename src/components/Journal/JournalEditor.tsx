@@ -16,10 +16,11 @@ import {
   FaRedo,
   FaStrikethrough,
   FaUndo,
+  FaSave,
 } from "react-icons/fa";
 import Placeholder from "@tiptap/extension-placeholder";
 
-const JournalEditor = () => {
+const JournalEditor = ({ date }: { date: Date }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -38,7 +39,18 @@ const JournalEditor = () => {
   });
 
   return (
-    <div className="p-3">
+    <div className="p-3 wired-divider-container">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">{date.toDateString()}</h2>
+        <button>
+          <FaSave />
+        </button>
+      </div>
+
+      <div className="my-5">
+        <wired-divider />
+      </div>
+
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
     </div>
