@@ -6,12 +6,14 @@ import axios from "axios";
 const MainJournal = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       const keys = JSON.parse(localStorage.getItem("keys")!);
 
       try {
+        setLoading(true);
         const { data } = await axios.get("/api/github/entry", {
           params: {
             secretKey: keys.secret,
@@ -22,9 +24,11 @@ const MainJournal = () => {
         });
 
         setContent(data.content);
+        setLoading(false);
       } catch (error: any) {
         if (error.response.status == 404) {
           setContent("");
+          setLoading(false);
         }
       }
     })();
@@ -50,7 +54,11 @@ const MainJournal = () => {
         <div className="flex-[3]">
           <div className="wired-card-container journal-writer-container">
             <wired-card>
-              <JournalEditor date={selectedDate} content={content} />
+              <JournalEditor
+                date={selectedDate}
+                content={content}
+                loading={loading}
+              />
             </wired-card>
           </div>
         </div>

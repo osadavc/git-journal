@@ -21,7 +21,15 @@ import {
 import Placeholder from "@tiptap/extension-placeholder";
 import axios from "axios";
 
-const JournalEditor = ({ date, content }: { date: Date; content: string }) => {
+const JournalEditor = ({
+  date,
+  content,
+  loading,
+}: {
+  date: Date;
+  content: string;
+  loading: boolean;
+}) => {
   const editor = useEditor(
     {
       extensions: [
@@ -40,7 +48,7 @@ const JournalEditor = ({ date, content }: { date: Date; content: string }) => {
       },
       content: content,
     },
-    [content]
+    [content, loading]
   );
 
   const saveContent = async () => {
@@ -75,8 +83,16 @@ const JournalEditor = ({ date, content }: { date: Date; content: string }) => {
         <wired-divider />
       </div>
 
-      <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      {loading && (
+        <div className="flex justify-center items-center ">
+          <p>Loading ...</p>
+        </div>
+      )}
+
+      <div className={loading ? "hidden" : ""}>
+        <MenuBar editor={editor} />
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 };
