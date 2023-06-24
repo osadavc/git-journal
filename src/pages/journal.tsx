@@ -74,6 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       select: {
         githubAccessToken: true,
         journalRepoName: true,
+        mode: true,
       },
     });
 
@@ -85,6 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {
         isLoggedIntoGithub: !!user?.githubAccessToken,
         isRepoCreated: !!user?.journalRepoName,
+        mode: user.mode,
       },
     };
   } catch (error) {
