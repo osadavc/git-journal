@@ -53,7 +53,7 @@ const NoKeys: FC<NoKeysProps> = ({ setReload }) => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto mt-16 px-4">
       <div className="wired-card-container">
         <input
           type="file"

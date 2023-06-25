@@ -16,9 +16,14 @@ const CreateRepo = () => {
 
     const {
       data: { keys },
-    } = await axios.post("/api/github/createRepo");
+    } = await axios.post("/api/github/createRepo", {
+      keyMode,
+    });
     localStorage.setItem("keys", JSON.stringify(keys));
-    localStorage.setItem("isBackupRequired", "true");
+
+    if (keyMode === "local") {
+      localStorage.setItem("isBackupRequired", "true");
+    }
 
     nProgress.done();
     location.reload();

@@ -25,7 +25,7 @@ const BackupRequired: FC<BackupRequiredProps> = ({ setReload }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto mt-16 px-4">
       <div className="wired-card-container">
         <wired-card>
           <div className="px-3 flex justify-center py-4 flex-col">

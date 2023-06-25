@@ -15,7 +15,12 @@ const MainJournal = () => {
 
   useEffect(() => {
     (async () => {
-      const keys = JSON.parse(localStorage.getItem("keys")!);
+      const keys = JSON.parse(
+        localStorage.getItem("keys")?.length! > 0 &&
+          localStorage.getItem("keys") !== "undefined"
+          ? localStorage.getItem("keys")!
+          : "{}"
+      );
 
       try {
         setLoading(true);
@@ -24,7 +29,6 @@ const MainJournal = () => {
             secretKey: keys.secret,
             initKey: keys.vector,
             date: selectedDate.toDateString(),
-            mode: "NonCustodial",
           },
         });
 

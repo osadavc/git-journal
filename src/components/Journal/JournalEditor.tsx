@@ -54,7 +54,13 @@ const JournalEditor = ({
   );
 
   const saveContent = async () => {
-    const keys = JSON.parse(localStorage.getItem("keys")!);
+    const keys = JSON.parse(
+      localStorage.getItem("keys")?.length! > 0 &&
+        localStorage.getItem("keys") !== "undefined"
+        ? localStorage.getItem("keys")!
+        : "{}"
+    );
+
     nProgress.start();
 
     try {
@@ -68,7 +74,6 @@ const JournalEditor = ({
             secretKey: keys.secret,
             initKey: keys.vector,
             date: date.toDateString(),
-            mode: "NonCustodial",
           },
         }
       );

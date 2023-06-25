@@ -28,8 +28,11 @@ const Journal: NextPage<JournalProps> = ({
   useEffect(() => {
     const isBackupRequired = localStorage.getItem("isBackupRequired");
 
+    console.log(localStorage.getItem("keys")?.length);
+
     const keys = JSON.parse(
-      localStorage.getItem("keys")?.length! > 0
+      localStorage.getItem("keys")?.length! > 0 &&
+        localStorage.getItem("keys") !== "undefined"
         ? localStorage.getItem("keys")!
         : "{}"
     );

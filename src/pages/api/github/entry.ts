@@ -24,15 +24,13 @@ router
       secretKey?: string;
       initKey?: string;
     } = {};
-    const { secretKey, initKey, mode, date } = req.query as {
+    const { secretKey, initKey, date } = req.query as {
       secretKey: string;
       initKey: string;
-      mode: "Custodial" | "NonCustodial";
       date: string;
     };
 
-    if (!date || !mode)
-      return res.status(400).json({ error: "Missing date or mode" });
+    if (!date) return res.status(400).json({ error: "Missing date" });
 
     const user = await prisma.user.findUnique({
       where: {
@@ -42,7 +40,8 @@ router
     if (!user || user.journalRepoName === null) {
       return res.status(404).json({ error: "User not found" });
     }
-    if (mode === "Custodial") {
+
+    if (user.mode === "Custodial") {
       keys = {
         secretKey: user.secretKey!,
         initKey: user.initKey!,
@@ -93,15 +92,13 @@ router
       secretKey?: string;
       initKey?: string;
     } = {};
-    const { secretKey, initKey, mode, date } = req.query as {
+    const { secretKey, initKey, date } = req.query as {
       secretKey: string;
       initKey: string;
-      mode: "Custodial" | "NonCustodial";
       date: string;
     };
 
-    if (!date || !mode)
-      return res.status(400).json({ error: "Missing date or mode" });
+    if (!date) return res.status(400).json({ error: "Missing date" });
 
     const formattedDate = formatDate(date);
 
@@ -114,7 +111,7 @@ router
       res.status(404).json({ error: "User not found" });
       return;
     }
-    if (mode === "Custodial") {
+    if (user.mode === "Custodial") {
       keys = {
         secretKey: user.secretKey!,
         initKey: user.initKey!,
