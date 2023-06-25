@@ -5,7 +5,9 @@ import Header from "@/components/Journal/Header";
 import MainJournal from "@/components/Journal/MainJournal";
 import NoKeys from "@/components/Journal/NoKeys";
 import prisma from "@/lib/prisma";
+import { displayToast } from "@/utils/toastUtils";
 import Passage from "@passageidentity/passage-node";
+import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import { useEffect, useState } from "react";
 
@@ -51,6 +53,46 @@ const Journal: NextPage<JournalProps> = ({
       setIsBackupRequired(false);
     }
   }, [reload]);
+
+  useEffect(() => {
+    (async () => {
+      const keys = JSON.parse(
+        localStorage.getItem("keys")?.length! > 0 &&
+          localStorage.getItem("keys") !== "undefined"
+          ? localStorage.getItem("keys")!
+          : "{}"
+      );
+
+      if (!keys.secret || !keys.vector) {
+        setIsKeys(false);
+        return;
+      }
+
+      if (mode == "Custodial") {
+        setIsKeys(true);
+        return;
+      } else {
+        await axios
+          .get("/api/github/verify", {
+            params: {
+              secretKey: keys.secret,
+              initKey: keys.vector,
+            },
+          })
+          .then(() => {
+            localStorage.setItem("keys", JSON.stringify(keys));
+            localStorage.removeItem("isBackupRequired");
+
+            setReload(true);
+          })
+          .catch(() => {
+            displayToast("Invalid Keys", true);
+            setIsKeys(false);
+            localStorage.removeItem("keys");
+          });
+      }
+    })();
+  }, []);
 
   return (
     <div>
