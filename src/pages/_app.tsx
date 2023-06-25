@@ -4,6 +4,8 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
+import { Toaster } from "react-hot-toast";
+
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
 import Router from "next/router";
@@ -20,6 +22,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
       </Head>
       <WiredElements />
+      <Toaster position="bottom-right" />
       <Component {...pageProps} />
     </>
   );
