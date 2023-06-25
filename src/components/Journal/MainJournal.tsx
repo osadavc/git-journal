@@ -108,6 +108,7 @@ const MainJournal = () => {
               <JournalEditor
                 date={selectedDate}
                 content={content}
+                setContent={setContent}
                 loading={loading}
               />
             </wired-card>

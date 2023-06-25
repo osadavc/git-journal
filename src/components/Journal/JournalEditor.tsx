@@ -22,14 +22,17 @@ import Placeholder from "@tiptap/extension-placeholder";
 import axios from "axios";
 import { displayToast } from "@/utils/toastUtils";
 import nProgress from "nprogress";
+import { useEffect, useCallback } from "react";
 
 const JournalEditor = ({
   date,
   content,
+  setContent,
   loading,
 }: {
   date: Date;
   content: string;
+  setContent: (content: string) => void;
   loading: boolean;
 }) => {
   const editor = useEditor(
@@ -52,6 +55,24 @@ const JournalEditor = ({
     },
     [content, loading]
   );
+
+  useEffect(() => {
+    console.log(content, "content");
+    console.log(editor?.getHTML(), "editor");
+
+    if (content === editor?.getHTML()) {
+      window.removeEventListener("beforeunload", beforeUnload);
+    } else {
+      window.addEventListener("beforeunload", beforeUnload);
+    }
+
+    return () => window.removeEventListener("beforeunload", beforeUnload);
+  }, [content, editor?.getHTML()]);
+
+  const beforeUnload = useCallback((e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  }, []);
 
   const saveContent = async () => {
     const keys = JSON.parse(
@@ -79,6 +100,7 @@ const JournalEditor = ({
       );
 
       displayToast("Journal Entry Saved");
+      setContent(editor?.getHTML()!);
     } catch (error) {
       displayToast("Error saving journal entry", true);
     } finally {
