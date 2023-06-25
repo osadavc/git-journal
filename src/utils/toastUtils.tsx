@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { BiError, BiCheck } from "react-icons/bi";
 
 export const displayToast = (text: string, error: boolean = false) => {
+  toast.dismiss();
   toast.custom((t) => (
     <div
       className={`${
@@ -13,9 +14,9 @@ export const displayToast = (text: string, error: boolean = false) => {
     >
       <div className="toast-card-wrapper">
         <wired-card>
-          <div className="flex justify-between items-center px-3">
+          <div className="flex justify-between items-center px-3 space-x-3">
             {error ? <BiError /> : <BiCheck />}
-            <p>Hey</p>
+            <p>{text}</p>
           </div>
         </wired-card>
       </div>

@@ -20,6 +20,8 @@ import {
 } from "react-icons/fa";
 import Placeholder from "@tiptap/extension-placeholder";
 import axios from "axios";
+import { displayToast } from "@/utils/toastUtils";
+import nProgress from "nprogress";
 
 const JournalEditor = ({
   date,
@@ -53,21 +55,30 @@ const JournalEditor = ({
 
   const saveContent = async () => {
     const keys = JSON.parse(localStorage.getItem("keys")!);
+    nProgress.start();
 
-    const { data } = await axios.post(
-      "/api/github/entry",
-      {
-        content: editor?.getHTML()!,
-      },
-      {
-        params: {
-          secretKey: keys.secret,
-          initKey: keys.vector,
-          date: date.toDateString(),
-          mode: "NonCustodial",
+    try {
+      await axios.post(
+        "/api/github/entry",
+        {
+          content: editor?.getHTML()!,
         },
-      }
-    );
+        {
+          params: {
+            secretKey: keys.secret,
+            initKey: keys.vector,
+            date: date.toDateString(),
+            mode: "NonCustodial",
+          },
+        }
+      );
+
+      displayToast("Journal Entry Saved");
+    } catch (error) {
+      displayToast("Error saving journal entry", true);
+    } finally {
+      nProgress.done();
+    }
   };
 
   return (

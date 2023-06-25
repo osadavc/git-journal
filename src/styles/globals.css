@@ -37,7 +37,7 @@ h1 {
 }
 
 .toast-card-wrapper .wired-rendered {
-  width: 100px;
+  min-width: 100px;
 }
 
 .wired-divider-container .wired-rendered {

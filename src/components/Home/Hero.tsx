@@ -1,6 +1,5 @@
 import Link from "next/link";
 import usePassage from "@/hooks/usePassage";
-import { displayToast } from "@/utils/toastUtils";
 
 const Hero = () => {
   const { isAuthorized } = usePassage();
@@ -8,13 +7,6 @@ const Hero = () => {
   return (
     <div className="max-w-7xl mx-auto pt-20 px-4">
       <div className="text-center">
-        <button
-          onClick={() => {
-            displayToast("hey");
-          }}
-        >
-          Hey
-        </button>
         <img
           src="/images/logo.png"
           alt="GitJournal Logo"
