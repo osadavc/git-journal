@@ -146,6 +146,16 @@ router
       }
     );
 
+    const decoded = atob(data.content);
+    const decrypted = decryptMessage(decoded, keys.secretKey!, keys.initKey!);
+
+    if (decrypted != default_message)
+      return res.status(400).json({ error: "Invalid keys" });
+
+    const encrypted = btoa(
+      encryptMessage(req.body.content, keys.secretKey!, keys.initKey!)
+    );
+
     let oldHash;
 
     try {
@@ -162,16 +172,6 @@ router
         oldHash = existingEntryData.sha;
       }
     } catch (error) {}
-
-    const decoded = atob(data.content);
-    const decrypted = decryptMessage(decoded, keys.secretKey!, keys.initKey!);
-
-    if (decrypted != default_message)
-      return res.status(400).json({ error: "Invalid keys" });
-
-    const encrypted = btoa(
-      encryptMessage(req.body.content, keys.secretKey!, keys.initKey!)
-    );
 
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
       owner: user.journalRepoName?.split("/")[0],

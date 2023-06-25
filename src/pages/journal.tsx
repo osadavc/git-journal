@@ -3,6 +3,7 @@ import ConnectGithub from "@/components/Journal/ConnectGithub";
 import CreateRepo from "@/components/Journal/CreateRepo";
 import Header from "@/components/Journal/Header";
 import MainJournal from "@/components/Journal/MainJournal";
+import NoKeys from "@/components/Journal/NoKeys";
 import prisma from "@/lib/prisma";
 import Passage from "@passageidentity/passage-node";
 import { GetServerSideProps, NextPage } from "next";
@@ -11,17 +12,35 @@ import { useEffect, useState } from "react";
 interface JournalProps {
   isLoggedIntoGithub: boolean;
   isRepoCreated: boolean;
+  mode: "Custodial" | "NonCustodial";
 }
 
 const Journal: NextPage<JournalProps> = ({
   isLoggedIntoGithub,
   isRepoCreated,
+  mode,
 }) => {
   const [isBackupRequired, setIsBackupRequired] = useState(false);
+  const [isKeys, setIsKeys] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const isBackupRequired = localStorage.getItem("isBackupRequired");
+
+    const keys = JSON.parse(
+      localStorage.getItem("keys")?.length! > 0
+        ? localStorage.getItem("keys")!
+        : "{}"
+    );
+
+    if ((keys.secret && keys.vector) || mode == "Custodial") {
+      setIsKeys(true);
+    } else {
+      setIsKeys(false);
+    }
+
+    setIsLoading(false);
 
     if (isBackupRequired) {
       setIsBackupRequired(true);
@@ -38,7 +57,11 @@ const Journal: NextPage<JournalProps> = ({
 
       {isLoggedIntoGithub ? (
         isRepoCreated ? (
-          <MainJournal />
+          isKeys ? (
+            <MainJournal />
+          ) : (
+            !isLoading && <NoKeys setReload={setReload} />
+          )
         ) : (
           <CreateRepo />
         )
