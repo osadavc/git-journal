@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Passage from "@passageidentity/passage-node";
+import nProgress from "nprogress";
+import { PassageElement } from "@passageidentity/passage-elements";
 
 interface authResult {
   redirect_url: string;
@@ -15,14 +17,17 @@ interface authResult {
 const Login = () => {
   const router = useRouter();
 
-  const passageElement = useRef<Element | null>(null);
+  const passageElement = useRef<PassageElement | null>(null);
 
   useEffect(() => {
     passageElement.current = document.querySelector("passage-auth");
 
-    (passageElement.current! as any).onSuccess = async (
-      authResult: authResult
-    ) => {
+    passageElement.current!.beforeAuth = () => {
+      nProgress.start();
+      return true;
+    };
+
+    passageElement.current!.onSuccess = async (authResult: authResult) => {
       const { status } = await axios.get("/api/auth");
 
       if (status === 200) {

@@ -72,7 +72,7 @@ const MainJournal = () => {
         Hey there ! Welcome to your Journal 👋🏻
       </h2>
 
-      <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0">
+      <div className="flex flex-col lg:flex-row lg:space-x-5 space-y-5 lg:space-y-0 py-10">
         <div className="flex-1 wired-card-container">
           <wired-card>
             <Calendar
