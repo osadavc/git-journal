@@ -65,11 +65,13 @@ router
       return res.status(400).json({ error: "Missing keys" });
     }
 
+    const formattedDate = formatDate(date);
+
     await octokit
       .request("GET /repos/{owner}/{repo}/contents/{path}", {
         owner: user.journalRepoName?.split("/")[0],
         repo: user.journalRepoName?.split("/")[1],
-        path: `${formatDate(date)}.md`,
+        path: `${formattedDate.folder}/${formattedDate.file}.md`,
       })
       .then((response: any) => {
         const decoded = atob(response.data.content);
@@ -152,7 +154,7 @@ router
         {
           owner: user.journalRepoName?.split("/")[0],
           repo: user.journalRepoName?.split("/")[1],
-          path: `${formattedDate}.md`,
+          path: `${formattedDate.folder}/${formattedDate.file}.md`,
         }
       );
 
@@ -174,7 +176,7 @@ router
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
       owner: user.journalRepoName?.split("/")[0],
       repo: user.journalRepoName?.split("/")[1],
-      path: `${formattedDate}.md`,
+      path: `${formattedDate.folder}/${formattedDate.file}.md`,
       message: `Journal Updated ${new Date().toISOString()}`,
       content: encrypted,
       sha: oldHash,

@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import JournalEditor from "./JournalEditor";
 import axios from "axios";
+import { formatDate } from "@/utils/dateUtils";
 
 const MainJournal = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedMonthEntries, setSelectedMonthEntries] = useState<string[]>(
+    []
+  );
+  const [activeStartDate, setActiveStartDate] = useState<Date | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -26,13 +31,36 @@ const MainJournal = () => {
         setContent(data.content);
         setLoading(false);
       } catch (error: any) {
-        if (error.response.status == 404) {
+        console.log(error);
+        if (error?.response?.status == 404) {
           setContent("");
           setLoading(false);
         }
       }
     })();
   }, [selectedDate]);
+
+  useEffect(() => {
+    getMonthlyEntries(activeStartDate || selectedDate);
+  }, [selectedDate]);
+
+  const getMonthlyEntries = async (startDate: Date | null) => {
+    try {
+      const { data } = await axios.get("/api/github/month", {
+        params: {
+          date: startDate!.toDateString(),
+        },
+      });
+
+      setSelectedMonthEntries(data.entries);
+    } catch (error: any) {
+      if (error.response.status == 404) {
+        console.log("No data found");
+      } else {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col mt-7 px-4">
@@ -48,6 +76,25 @@ const MainJournal = () => {
                 setSelectedDate(e as Date);
               }}
               value={selectedDate}
+              onActiveStartDateChange={async ({ activeStartDate, view }) => {
+                if (view == "month") {
+                  await getMonthlyEntries(activeStartDate);
+                }
+                setActiveStartDate(activeStartDate);
+              }}
+              tileClassName={({ date, view }) => {
+                if (view == "month") {
+                  if (
+                    selectedMonthEntries.find(
+                      (x) => x === formatDate(date.toString()).file
+                    )
+                  ) {
+                    return "days-with-entries";
+                  }
+                } else {
+                  return "null";
+                }
+              }}
             />
           </wired-card>
         </div>

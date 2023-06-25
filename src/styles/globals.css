@@ -73,6 +73,10 @@ h1 {
   color: white !important;
 }
 
+.days-with-entries {
+  color: rgb(0 139 255) !important;
+}
+
 /* ProseMirror */
 
 .ProseMirror p.is-editor-empty:first-child::before {
