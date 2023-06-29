@@ -2,9 +2,11 @@ import axios from "axios";
 import nProgress from "nprogress";
 import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const CreateRepo = () => {
   const [keyMode, setKeyMode] = useState<"cloud" | "local" | "">("");
+  const router = useRouter();
 
   const createRepo = async () => {
     if (keyMode === "") {

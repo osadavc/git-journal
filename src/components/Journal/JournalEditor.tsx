@@ -23,6 +23,8 @@ import axios from "axios";
 import { displayToast } from "@/utils/toastUtils";
 import nProgress from "nprogress";
 import { useEffect, useCallback } from "react";
+import usePassage from "@/hooks/usePassage";
+import { useRouter } from "next/router";
 
 const JournalEditor = ({
   date,
@@ -56,6 +58,9 @@ const JournalEditor = ({
     [content, loading]
   );
 
+  const router = useRouter();
+  const { isAuthorized } = usePassage();
+
   useEffect(() => {
     console.log(content, "content");
     console.log(editor?.getHTML(), "editor");
@@ -81,6 +86,10 @@ const JournalEditor = ({
         ? localStorage.getItem("keys")!
         : "{}"
     );
+
+    if (!isAuthorized) {
+      return router.push("/login");
+    }
 
     nProgress.start();
 

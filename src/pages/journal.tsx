@@ -81,7 +81,6 @@ const Journal: NextPage<JournalProps> = ({
           })
           .then(() => {
             localStorage.setItem("keys", JSON.stringify(keys));
-            localStorage.removeItem("isBackupRequired");
 
             setReload(true);
           })
