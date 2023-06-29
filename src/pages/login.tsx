@@ -77,10 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const userID = await passage.authenticateRequest(req);
 
-    console.log(userID);
-
     if (userID) {
-      console.log("redirecting");
       return {
         props: {},
         redirect: {

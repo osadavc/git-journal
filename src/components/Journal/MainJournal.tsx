@@ -35,7 +35,6 @@ const MainJournal = () => {
         setContent(data.content);
         setLoading(false);
       } catch (error: any) {
-        console.log(error);
         if (error?.response?.status == 404) {
           setContent("");
           setLoading(false);

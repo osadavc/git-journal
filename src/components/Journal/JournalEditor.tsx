@@ -62,9 +62,6 @@ const JournalEditor = ({
   const { isAuthorized } = usePassage();
 
   useEffect(() => {
-    console.log(content, "content");
-    console.log(editor?.getHTML(), "editor");
-
     if (content === editor?.getHTML()) {
       window.removeEventListener("beforeunload", beforeUnload);
     } else {
