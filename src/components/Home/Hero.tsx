@@ -28,7 +28,7 @@ const Hero = () => {
           </div>
         </Link>
 
-        <div className="flex wired-card-container mt-20 space-x-5 text-left">
+        <div className="flex md:flex-row wired-card-container mt-20 md:space-x-5 text-left flex-col">
           <div className="w-full">
             <wired-card>
               <div className="text-left">
@@ -46,7 +46,7 @@ const Hero = () => {
               </p>
             </wired-card>
           </div>
-          <div className="w-full">
+          <div className="w-full hidden md:block">
             <wired-card>
               <div className="text-left">
                 <img src="/images/user.png" alt="User" />
@@ -63,7 +63,7 @@ const Hero = () => {
               </p>
             </wired-card>
           </div>
-          <div className="w-full">
+          <div className="w-full hidden md:block">
             <wired-card>
               <div className="text-left">
                 <img src="/images/user.png" alt="User" />

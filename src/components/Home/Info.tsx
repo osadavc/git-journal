@@ -14,10 +14,10 @@ const Info = () => {
         </p>
       </div>
 
-      <div className="flex mt-20 space-x-10">
+      <div className="flex mt-20 md:space-x-10 flex-col md:flex-row">
         <div className="flex-1">
           <div className="wired-card-container">
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center mb-10 md:mb-0">
               <img src="/images/info.png" alt="" />
             </div>
           </div>
