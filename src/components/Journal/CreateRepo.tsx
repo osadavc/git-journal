@@ -43,9 +43,14 @@ const CreateRepo = () => {
               Create a repository to store your journal entries. Your journal
               entries will be encrypted and you need to choose if you store your
               encryption key in the cloud or locally.{" "}
-              <span className="text-blue-600">
-                Didn't understand anything ?
-              </span>
+              <a
+                href="https://blog.osadavidath.com/introducing-gitjournal#cljjmu0lb009szznv221haefl?t=1688193520325:~:text=of%20those%20options-,Local,-Cloud"
+                target="_blank"
+              >
+                <span className="text-blue-600">
+                  Didn't understand anything ?
+                </span>
+              </a>
             </div>
 
             <div className="mt-5 flex">
